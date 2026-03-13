@@ -1,0 +1,91 @@
+openapi: 3.1.0
+info:
+  title: Obsidian GPT Bridge
+  version: 2.0.0
+  description: API para salvar notas Markdown dentro do vault do Obsidian usando Google Drive API.
+servers:
+  - url: https://notes.seudominio.com
+paths:
+  /api/health:
+    get:
+      operationId: healthCheck
+      summary: Verifica se a ponte esta online.
+      responses:
+        "200":
+          description: Servico respondendo normalmente.
+  /api/notes:
+    post:
+      operationId: createObsidianNote
+      summary: Cria uma nota Markdown no vault do Obsidian.
+      description: Salva um arquivo .md dentro da pasta configurada do vault no Google Drive.
+      x-openai-isConsequential: true
+      security:
+        - apiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+                - title
+                - markdown
+              properties:
+                title:
+                  type: string
+                  description: Titulo da nota e nome base do arquivo.
+                folder:
+                  type: string
+                  description: Pasta relativa dentro do vault. Se nao for enviada, a API usa Inbox.
+                  example: Inbox/Leituras
+                source:
+                  type: string
+                  description: Fonte da anotacao, como aula, podcast ou artigo.
+                tags:
+                  type: array
+                  items:
+                    type: string
+                  description: Tags para frontmatter da nota.
+                markdown:
+                  type: string
+                  description: Conteudo final da nota em Markdown.
+                duplicateStrategy:
+                  type: string
+                  enum:
+                    - reject
+                    - suffix
+                    - overwrite
+                  description: Como lidar com um arquivo ja existente.
+                  default: reject
+            examples:
+              notaSimples:
+                summary: Nota pronta para salvar
+                value:
+                  title: Resumo do podcast de estrategia
+                  folder: Inbox
+                  source: Podcast X
+                  tags:
+                    - podcast
+                    - estrategia
+                  duplicateStrategy: reject
+                  markdown: |
+                    # Resumo
+
+                    - Ponto 1
+                    - Ponto 2
+      responses:
+        "201":
+          description: Nota criada com sucesso.
+        "400":
+          description: Payload invalido.
+        "401":
+          description: Token ausente ou invalido.
+        "409":
+          description: Ja existe uma nota com o mesmo titulo.
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

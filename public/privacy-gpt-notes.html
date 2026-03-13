@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Privacy Policy</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f7f4ea;
+        --card: #fffdf7;
+        --text: #1e1d1a;
+        --muted: #666050;
+        --border: #d7cdb5;
+      }
+
+      body {
+        margin: 0;
+        font-family: Georgia, "Times New Roman", serif;
+        background: linear-gradient(180deg, #efe8d4 0%, var(--bg) 100%);
+        color: var(--text);
+      }
+
+      main {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 48px 20px 80px;
+      }
+
+      article {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 28px;
+        box-shadow: 0 18px 40px rgba(60, 48, 18, 0.08);
+      }
+
+      h1, h2 {
+        margin-top: 0;
+      }
+
+      p, li {
+        line-height: 1.6;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <article>
+        <h1>Privacy Policy</h1>
+        <p class="muted">Last updated: 2026-03-13</p>
+        <p>This GPT sends note content to a private API hosted on Vercel and controlled by the owner of this GPT.</p>
+
+        <h2>What is sent</h2>
+        <ul>
+          <li>note title</li>
+          <li>target folder inside the Obsidian vault</li>
+          <li>optional tags and source</li>
+          <li>markdown content generated for the note</li>
+        </ul>
+
+        <h2>What the API does</h2>
+        <ul>
+          <li>validates the request</li>
+          <li>exchanges a Google OAuth refresh token for a temporary access token</li>
+          <li>creates or updates a Markdown file inside the configured Google Drive folder used by the Obsidian vault</li>
+          <li>does not share note content with third parties beyond the infrastructure required to deliver the request</li>
+        </ul>
+
+        <h2>Retention</h2>
+        <p>Note files are stored only in the owner's Obsidian vault on Google Drive and any sync targets chosen by the owner.</p>
+
+        <h2>Contact</h2>
+        <p>Replace this line with your own contact email or website.</p>
+      </article>
+    </main>
+  </body>
+</html>
