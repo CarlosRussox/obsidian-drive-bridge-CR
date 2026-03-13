@@ -94,6 +94,7 @@ function mapError(error) {
         ok: false,
         error: "google_auth_error",
         message: error.message,
+        details: error.details || null,
       },
     };
   }
@@ -105,6 +106,7 @@ function mapError(error) {
         ok: false,
         error: "google_drive_error",
         message: error.message,
+        details: error.details || null,
       },
     };
   }

@@ -1,23 +1,23 @@
 openapi: 3.1.0
 info:
   title: Obsidian GPT Bridge
-  version: 2.0.0
-  description: API para salvar notas Markdown dentro do vault do Obsidian usando Google Drive API.
+  version: 2.0.1
+  description: API para salvar notas Markdown no vault do Obsidian via Google Drive API.
 servers:
-  - url: https://notes.seudominio.com
+  - url: https://note.thygrowth.com.br
 paths:
   /api/health:
     get:
       operationId: healthCheck
-      summary: Verifica se a ponte esta online.
+      summary: Verifica se a API esta online.
       responses:
         "200":
-          description: Servico respondendo normalmente.
+          description: OK
   /api/notes:
     post:
       operationId: createObsidianNote
-      summary: Cria uma nota Markdown no vault do Obsidian.
-      description: Salva um arquivo .md dentro da pasta configurada do vault no Google Drive.
+      summary: Cria uma nota no Obsidian
+      description: Salva um arquivo Markdown dentro da pasta configurada do vault.
       x-openai-isConsequential: true
       security:
         - apiKeyAuth: []
@@ -26,54 +26,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              additionalProperties: false
-              required:
-                - title
-                - markdown
-              properties:
-                title:
-                  type: string
-                  description: Titulo da nota e nome base do arquivo.
-                folder:
-                  type: string
-                  description: Pasta relativa dentro do vault. Se nao for enviada, a API usa Inbox.
-                  example: Inbox/Leituras
-                source:
-                  type: string
-                  description: Fonte da anotacao, como aula, podcast ou artigo.
-                tags:
-                  type: array
-                  items:
-                    type: string
-                  description: Tags para frontmatter da nota.
-                markdown:
-                  type: string
-                  description: Conteudo final da nota em Markdown.
-                duplicateStrategy:
-                  type: string
-                  enum:
-                    - reject
-                    - suffix
-                    - overwrite
-                  description: Como lidar com um arquivo ja existente.
-                  default: reject
-            examples:
-              notaSimples:
-                summary: Nota pronta para salvar
-                value:
-                  title: Resumo do podcast de estrategia
-                  folder: Inbox
-                  source: Podcast X
-                  tags:
-                    - podcast
-                    - estrategia
-                  duplicateStrategy: reject
-                  markdown: |
-                    # Resumo
-
-                    - Ponto 1
-                    - Ponto 2
+              $ref: "#/components/schemas/CreateNoteRequest"
       responses:
         "201":
           description: Nota criada com sucesso.
@@ -89,3 +42,37 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
+  schemas:
+    CreateNoteRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - title
+        - markdown
+      properties:
+        title:
+          type: string
+          description: Titulo da nota e nome base do arquivo.
+        folder:
+          type: string
+          description: Pasta relativa dentro do vault. Se nao for enviada, a API usa Inbox.
+          example: Inbox/Leituras
+        source:
+          type: string
+          description: Fonte da anotacao, como aula, podcast ou artigo.
+        tags:
+          type: array
+          description: Tags para o frontmatter da nota.
+          items:
+            type: string
+        markdown:
+          type: string
+          description: Conteudo final da nota em Markdown.
+        duplicateStrategy:
+          type: string
+          description: Como lidar com um arquivo ja existente.
+          enum:
+            - reject
+            - suffix
+            - overwrite
+          default: reject
